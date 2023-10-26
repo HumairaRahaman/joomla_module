@@ -1,0 +1,10 @@
+<extension version="3.9" type="plugin" group="myplugin">
+    <name>My Plugin</name>
+    <author>Humaira</author>
+    <creationDate>October 26, 2023</creationDate>
+    <version>1.0</version>
+    <description>Joomla Plugin</description>
+    <files>
+        <filename plugin="myplugin">myplugin.php</filename>
+    </files>
+</extension>

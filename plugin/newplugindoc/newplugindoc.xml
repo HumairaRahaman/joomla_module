@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="mygroup">
+    <name>plg_myplugin</name>
+    <author>Humaira</author>
+    <creationDate>October 2023</creationDate>
+    <copyright>Copyright (C) 2023 Your Company. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>1.0.0</version>
+    <description>My Joomla Plugin</description>
+    <files>
+        <filename plugin="myplugin">myplugin.php</filename>
+    </files>
+</extension>
