@@ -1,38 +1,50 @@
 <?php
-defined('_JEXEC') or die;
+/*****************************************************************
+ * @package compressor
+ * @version 1.0
+ * @author ThemeXpert http://www.themexpert.com
+ *****************************************************************/
+
+// no direct access
+defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Plugin\CMSPlugin;
 
-class PlgSystemCompressor extends CMSPlugin
+class plgSystemCompressor extends CMSPlugin
 {
-    public function onAfterRender()
+
+    function onAfterRender()
     {
         $app = JFactory::getApplication();
+        if( ! $app->isClient('site') ) return;
 
-        if ($app->isClient('site')) {
-            $buffer = $app->getBody();
+        $doc = JFactory::getDocument();
+        $docType = $doc->getType();
 
-            if (strpos($buffer, '<html') !== false) {
-                $compressedBuffer = $this->compressHTML($buffer);
-                $app->setBody($compressedBuffer);
-            }
-        }
+        // Verification
+        if( $docType != 'html' ) return;
 
-        return true;
-    }
+        $body = JFactory::getApplication()->getBody();
 
-    private function compressHTML($html)
-    {
-        $search = [
-            '/\>[^\S ]+/s',  // Strip whitespaces after tags
-            '/[^\S ]+\</s',  // Strip whitespaces before tags
-            '/(\s)+/s'       // Shorten multiple whitespace sequences
-        ];
 
-        $replace = ['>', '<', '\\1'];
+        $html = '
+            <!-- compressor by ThemeXpert.com 1.0 -->
+            <div id="compressor">
+                <div class="compressor">
+                    <span class="helloinner">
+                        <p class="text">This is my test plugin. its just show the html.</p>
+                    </span>
+                </div>
+            </div>
+            <!-- compressor by ThemeXpert.com 1.0 -->
+        ';
 
-        $compressedHTML = preg_replace($search, $replace, $html);
+        $pattern = "/<\/?body+((\s+(\w|\w[\w-]*\w)(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/";
 
-        return $compressedHTML;
+        preg_match($pattern, $body, $match);
+
+        $body = str_replace($match[0], $match[0] . $html, $body);
+
+        JFactory::getApplication()->setBody($body);
     }
 }
