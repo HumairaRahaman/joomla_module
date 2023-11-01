@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="system" method="upgrade">
+	<name>plg_system_html</name>
+	<author>ThemeXpert! Project</author>
+	<creationDate>2023-10</creationDate>
+	<copyright>(C) 2023-2024 ThemeXpert Ltd.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>support@themexpert.com</authorEmail>
+	<authorUrl>www.themexpert.com</authorUrl>
+	<version>1.0.0</version>
+	<description>PLG_HTML_XML_DESCRIPTION</description>
+	<namespace path="src">Joomla\Plugin\System\html</namespace>
+	<files>
+		<folder plugin="html">services</folder>
+		<folder>src</folder>
+		<filename>LICENSE.txt</filename>
+		<filename>README.md</filename>
+	</files>
+
+</extension>

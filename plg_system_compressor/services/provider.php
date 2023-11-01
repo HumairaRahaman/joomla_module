@@ -1,60 +1,46 @@
 <?php
 
+/**
+ * @package     Joomla.Plugin
+ * @subpackage  System.sef
+ *
+ * @copyright   (C) 2023 ThemeXpert Ltd. <https://www.themexpert.com>
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
 \defined('_JEXEC') or die;
 
+use Joomla\CMS\Extension\PluginInterface;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
-use Joomla\CMS\Extension\PluginInterface;
-use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\Plugin\System\Compressor\Compressor;
+use Joomla\Event\DispatcherInterface;
+use Joomla\Plugin\System\html\Extension\html;
 
 return new class () implements ServiceProviderInterface {
+    /**
+     * Registers the service provider with a DI container.
+     *
+     * @param   Container  $container  The DI container.
+     *
+     * @return  void
+     *
+     * @since   4.4.0
+     */
     public function register(Container $container): void
     {
         $container->set(
             PluginInterface::class,
-        
-                    public function onAfterRender()
-                    {
-                        $app = Factory::getApplication();
-                        if (!$app->isClient('site')) {
-                            return;
-                        }
-
-                        $doc = Factory::getDocument();
-                        $docType = $doc->getType();
-
-                        // Verification
-                        if ($docType !== 'html') {
-                            return;
-                        }
-
-                        $body = Factory::getApplication()->getBody();
-
-                        $html = '
-                            <!-- compressor by ThemeXpert.com 1.0 -->
-                            <div id="compressor">
-                                <div class="compressor">
-                                    <span class="helloinner">
-                                        <p class="text">This is my test plugin. It just shows the HTML.</p>
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- compressor by ThemeXpert.com 1.0 -->
-                        ';
-
-                        $pattern = "/<\/?body+((\s+(\w|\w[\w-]*\w)(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/";
-
-                        preg_match($pattern, $body, $match);
-
-                        $body = str_replace($match[0], $match[0] . $html, $body);
-
-                        Factory::getApplication()->setBody($body);
-                    }
-
+            function (Container $container) {
+                $plugin     = new html(
+                    $container->get(DispatcherInterface::class),
+                    (array) PluginHelper::getPlugin('system', 'html')
+                );
                 $plugin->setApplication(Factory::getApplication());
+
                 return $plugin;
+            }
         );
     }
 };
